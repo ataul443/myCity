@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
-import HomeScreen from "./components/screens/home";
+import Router from "./router/router";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import allReducers from "./reducers/reducer";
@@ -11,7 +11,7 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={dataStore}>
-        <HomeScreen />
+        <Router />
       </Provider>
     );
   }

@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import { Grid, Col, Row } from "react-native-easy-grid";
 import { Field, reduxForm } from "redux-form";
-import RFButton from "./rf-button";
+import RFButton from "../components/basic_components/rf-button";
+import { Actions } from "react-native-router-flux";
 import { bindActionCreators } from "redux";
+import userData from "../actions/action_user_data";
 import { connect } from "react-redux";
-import { UserDataAction } from "../../actions/action_user_data";
+
 import {
   Container,
   Header,
@@ -56,25 +58,35 @@ const validate = values => {
   return error;
 };
 
-class AuthCard extends Component {
+class LoginForm extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isReady: true,
-      frame: "",
+      authState: "Log In",
       sum: "0"
     };
     this.submit = this.submit.bind(this);
     this.renderInput = this.renderInput.bind(this);
   }
 
-  submit = values => {
-    console.log(values.email);
-    console.log(values.password);
-  };
+  submit(values) {
+    user = {};
+    console.log(this.props.test);
+    user.email = values.email;
+    user.password = values.password;
+    this.props.userDataf(user);
 
-  renderInput({ input, label, type, meta: { touche, error, warning } }) {
+    Actions.ngo();
+  }
+
+  renderInput({
+    input: { onchange, ...restinput },
+    label,
+    type,
+    meta: { touche, error, warning }
+  }) {
     var hasError = false;
     if (error !== undefined) {
       hasError = true;
@@ -84,7 +96,8 @@ class AuthCard extends Component {
         <Item floatingLabel error={hasError}>
           <Label>{label}</Label>
           <Input
-            {...input}
+            onChangeText={onchange}
+            {...restinput}
             secureTextEntry={label == "Password" ? true : false}
           />
         </Item>
@@ -109,26 +122,24 @@ class AuthCard extends Component {
         <Card>
           <CardItem>
             <Body>
-              <Form>
-                <Field
-                  name="email"
-                  label="Username or Email"
-                  component={this.renderInput}
-                  style={{ width: 80 }}
-                />
-                <Field
-                  name="password"
-                  label="Password"
-                  component={this.renderInput}
-                  style={{ width: 80 }}
-                />
+              <Field
+                name="email"
+                label="Username or Email"
+                component={this.renderInput}
+                style={{ width: 80 }}
+              />
+              <Field
+                name="password"
+                label="Password"
+                component={this.renderInput}
+                style={{ width: 80 }}
+              />
 
-                <RFButton
-                  text="Submit"
-                  onSubmit={this.props.handleSubmit(this.submit)}
-                  buttonText="Log In"
-                />
-              </Form>
+              <RFButton
+                text={this.state.authState}
+                onSubmit={this.props.handleSubmit(this.submit)}
+                buttonText="Log In"
+              />
             </Body>
           </CardItem>
         </Card>
@@ -137,19 +148,17 @@ class AuthCard extends Component {
   }
 }
 
-reduxForm({
+LoginForm = reduxForm({
   form: "authform",
   validate
-})(AuthCard);
+})(LoginForm);
 
 function mapStateToProps(state) {
-  return {
-    user: state.user
-  };
+  return { test: state.test };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ actionUser: UserDataAction }, dispatch);
+  return bindActionCreators({ userDataf: userData }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthCard);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);

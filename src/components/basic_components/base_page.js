@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { Grid, Col, Row } from "react-native-easy-grid";
-import AuthForm from "../basic_components/auth_card";
 
 import {
   Container,
@@ -21,19 +20,7 @@ import {
   Spinner
 } from "native-base";
 
-class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      authState: false
-    };
-  }
-
-  spinnerLoader = () => {
-    if (!this.state.authState) {
-      <Spinner />;
-    }
-  };
+class BasePage extends Component {
   render() {
     return (
       <Container>
@@ -44,18 +31,16 @@ class HomeScreen extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>Home Screen</Title>
+            <Title>{this.props.title}</Title>
           </Body>
           <Right />
         </Header>
         <Grid>
-          <Row size={75}>
-            <AuthForm />
-          </Row>
+          <Row size={75}>{this.props.withForm}</Row>
         </Grid>
       </Container>
     );
   }
 }
 
-export default HomeScreen;
+export default BasePage;
