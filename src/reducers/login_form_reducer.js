@@ -3,8 +3,11 @@ function loginData(state = null, action) {
     case "USER_CREDENTIALS":
       return {
         ...state,
-        email: action.email,
-        password: action.password
+        userObject: {
+          email: action.payload.email,
+          password: action.payload.password,
+          test: "test"
+        }
       };
       break;
   }

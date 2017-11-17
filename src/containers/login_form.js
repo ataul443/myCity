@@ -73,7 +73,6 @@ class LoginForm extends Component {
 
   submit(values) {
     user = {};
-    console.log(this.props.test);
     user.email = values.email;
     user.password = values.password;
     this.props.userDataf(user);
